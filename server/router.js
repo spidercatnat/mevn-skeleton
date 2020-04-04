@@ -21,14 +21,14 @@ class Routing {
 
     init() {
         const { app } = this;
-        
+
         app.get("/api/all", async (req, res) => {
             const posts = await db.collection("posts");
             res.send(await posts.find({}).toArray())
         })
 
         app.post("/api/posts", async (req, res) => {
-            const { posts } = await db.collection("posts");
+            const posts = await db.collection("posts");
             await posts.insertOne({
                 text: req.body.text,
                 createdAt: new Date()
@@ -37,7 +37,7 @@ class Routing {
         })
 
         app.delete("/api/delete/:id", async (req, res) => {
-            const { posts } = await db.collection("posts");
+            const posts = await db.collection("posts");
             await posts.deleteOne({ _id: new require("mongodb").ObjectID(req.params.id) });
             res.status(200).send()
         })
