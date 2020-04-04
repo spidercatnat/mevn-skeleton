@@ -4,7 +4,9 @@
   "description": "Boilerplate for Mongo, Vue, Express, Node apps.",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"yarn server\" \"yarn client\"",
+    "dev": "concurrently \"yarn server\" \"yarn client\"",
+    "prod": "NODE_ENV=production yarn server",
+    "build": "node internals/scripts/build",
     "server": "nodemon server",
     "client": "node internals/scripts/client",
     "test": "echo \"Error: no test specified\" && exit 1"
