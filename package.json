@@ -1,0 +1,33 @@
+{
+  "name": "mevn-skeleton",
+  "version": "1.0.0",
+  "description": "Boilerplate for Mongo, Vue, Express, Node apps.",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"yarn server\" \"yarn client\"",
+    "server": "nodemon server",
+    "client": "node internals/scripts/client",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spidercatnat/mevn-skeleton.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spidercatnat/mevn-skeleton/issues"
+  },
+  "homepage": "https://github.com/spidercatnat/mevn-skeleton#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.5",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.2"
+  }
+}
