@@ -1,13 +1,13 @@
 <template>
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href="https://bulma.io">
+      <router-link class="navbar-item" to="/">
         <img
           src="https://www.svgrepo.com/show/300753/barber-shop.svg"
           style="height: 30px;"
         />
         BarberZen
-      </a>
+      </router-link>
 
       <a
         role="button"
@@ -31,7 +31,9 @@
       <div class="navbar-start">
         <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-small is-inverted is-primary ripple is-hidden-mobile">
+            <a
+              class="button is-small is-inverted is-primary ripple is-hidden-mobile"
+            >
               <strong>Book Now</strong>
             </a>
           </div>
@@ -42,10 +44,14 @@
         <div class="navbar-item">
           <div class="buttons">
             <a class="button is-primary">
-              <strong>Sign up</strong>
+              <router-link tag='span' to="/register">
+                <strong>Sign up</strong>
+              </router-link>
             </a>
             <a class="button is-light">
-              Log in
+              <router-link tag='span' to="/login">
+                Log in
+              </router-link>
             </a>
           </div>
         </div>

@@ -3,7 +3,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home";
-import TheLogin from '../components/TheLogin';
+import Login from '../views/Login';
+import TheSignup from '../components/TheSignup';
+
 
 Vue.use(VueRouter);
 
@@ -17,7 +19,12 @@ const router = new VueRouter({
         {
             path: '/login',
             name: 'Login',
-            component: TheLogin
+            component: Login
+        },
+        {
+            path: '/register',
+            name: 'Signup',
+            component: TheSignup
         }
     ]
 })
