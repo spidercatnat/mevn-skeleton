@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/spidercatnat/mevn-skeleton#readme",
   "dependencies": {
+    "animate.css": "^3.7.2",
     "body-parser": "^1.19.0",
+    "bulma": "^0.8.1",
     "concurrently": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

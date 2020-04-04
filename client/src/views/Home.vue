@@ -1,10 +1,14 @@
 <template>
-  <div>Home</div>
+  <TheNavBar />
 </template>
 
 <script>
+import TheNavBar from "../components/TheNavBar";
 export default {
   name: "Home",
+  components: {
+      TheNavBar
+  }
 };
 </script>
 
