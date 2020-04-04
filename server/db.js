@@ -1,5 +1,5 @@
 const mongodb = require("mongodb");
-process.env.NODE_ENV="production"
+
 const MONGODB_URI = process.env.NODE_ENV === "production" ? process.env.MONGODB_URI : "mongodb://127.0.0.1:27017/";
 
 const db = {
