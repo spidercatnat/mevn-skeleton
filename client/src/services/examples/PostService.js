@@ -13,7 +13,6 @@ class PostService {
                 try {
                     const res = await axios.get(url)
                     const data = await res.data;
-                    console.log(data)
                     if(!data.length) return resolve([{ text: "No posts have been created yet. Make yours above!", createdAt: new Date()}])
                     resolve(
                         data.map(post => ({
@@ -35,8 +34,6 @@ class PostService {
     static deletePost(id) {
         return axios.delete(`${url}/${id}`)
     }
-
-
 
 }
 
