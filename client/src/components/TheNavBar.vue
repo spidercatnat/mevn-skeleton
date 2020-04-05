@@ -1,5 +1,8 @@
 <template>
   <nav
+    style="outline: none;"
+    @blur="toggleMenu"
+    tabindex="0"
     class="navbar is-fixed-top"
     role="navigation"
     aria-label="main navigation"
@@ -19,7 +22,7 @@
         aria-label="menu"
         aria-expanded="false"
         data-target="navbarBasicExample"
-        @click="openMenu"
+        @click="toggleMenu"
       >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -51,7 +54,9 @@
             <router-link class="button is-light" to="/login" v-if="!loggedIn">
               Log in
             </router-link>
-            <a class="button is-light" to="/login" @click="logout" v-else>Logout</a>
+            <a class="button is-light" to="/login" @click="logout" v-else
+              >Logout</a
+            >
           </div>
         </div>
       </div>
@@ -61,6 +66,7 @@
 
 <script>
 import UserService from "../services/UserService";
+import { mapActions } from "vuex";
 export default {
   name: "TheNavBar",
   data() {
@@ -69,19 +75,21 @@ export default {
       loggedIn: false,
     };
   },
-  async created() {
-    // This should also be stored in the Vuex store
-    // It's not updating because the header is persistent
-    this.loggedIn = await UserService.guard();
+  async updated() {
+    this.loggedIn = await this["user/auth"]();
   },
   methods: {
-    openMenu() {
-      this.isActive = !this.isActive;
+    ...mapActions(["user/auth"]),
+    toggleMenu() {
+      setTimeout(() => {
+        this.isActive = !this.isActive;
+      }, 100);
     },
     async logout() {
       await UserService.logout();
-      this.$router.push("/");
-    }
+      await this.$router.push("/");
+      this.toggleMenu()
+    },
   },
 };
 </script>
