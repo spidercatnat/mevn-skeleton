@@ -1,7 +1,6 @@
 <template>
   <div style="width: 50%;">
     <progress class="progress is-small is-primary" v-if="loading" />
-
     <div class="notification is-success has-text-centered" v-if="success">
       <p><strong>Success!</strong> {{ success }}</p>
     </div>

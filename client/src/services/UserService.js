@@ -12,10 +12,21 @@ class UserService {
                 } catch (e) {
                     reject(e.response.data);
                 }
-
             })(newUser)
         })
+    }
 
+    static login(creds) {
+        return new Promise((resolve, reject) => {
+            (async (creds) => {
+                try {
+                    const { data: req } = await axios.post(`${url}/login`, { ...creds });
+                    resolve(req);
+                } catch (e) {
+                    reject(e.response.data);
+                }
+            })(creds)
+        })
     }
 
     static guard() {
