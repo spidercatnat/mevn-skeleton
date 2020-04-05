@@ -32,7 +32,7 @@
         <div class="navbar-item">
           <div class="buttons">
             <a
-              class="button is-small is-inverted is-primary ripple is-hidden-mobile"
+              class="button is-small is-inverted is-primary ripple"
             >
               <strong>Book Now</strong>
             </a>

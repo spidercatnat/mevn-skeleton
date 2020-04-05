@@ -2,23 +2,26 @@
   <div class="box">
     <div class="login">
       <div>
-        <h4 class="level title is-title-4">
-          <span class="level-left">
+     <div class="level-left">
+          <div class="level-item">
             <img
               src="https://www.svgrepo.com/show/300753/barber-shop.svg"
               style="height: 30px;"
             />
-          </span>
-          <span class="level-left">
-            Log in
-          </span>
-          <span class="level-right">
-            <img
-              src="https://www.svgrepo.com/show/300753/barber-shop.svg"
-              style="height: 30px;"
-            />
-          </span>
-        </h4>
+          </div>
+          <section class="hero">
+            <div class="hero-body">
+              <div class="container">
+                <h1 class="title">
+                  Log in
+                </h1>
+                <h2 class="subtitle">
+                  Manage appointments from your BarberZen dashboard.
+                </h2>
+              </div>
+            </div>
+          </section>
+        </div>
         <div class="field">
           <p class="control has-icons-left has-icons-right">
             <input class="input" type="email" placeholder="Email" />

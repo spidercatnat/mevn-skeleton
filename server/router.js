@@ -2,8 +2,8 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const mongodb = require("mongodb");
 const { db } = require("./db");
+const { User } = require("./db/models")
 
 class Routing {
     constructor(app) {
@@ -18,43 +18,58 @@ class Routing {
         app.use(bodyParser.raw());
         app.use(bodyParser.text({ type: "text/*" }));
         app.disable("x-powered-by");
+        db.connect()
     }
 
     init() {
         const { app } = this;
 
-        app.post("/api/posts", async (req, res) => {
-            const posts = await db.collection("posts");
-            await posts.insertOne({
-                text: req.body.text,
-                createdAt: new Date()
+        // app.post("/api/posts", async (req, res) => {
+        //     const posts = await db.collection("posts");
+        //     await posts.insertOne({
+        //         text: req.body.text,
+        //         createdAt: new Date()
+        //     });
+        //     res.status(201).send()
+        // })
+
+        app.post("/api/signup", async (req, res) => {
+            try {
+                const user = new User(req.body.newUser);
+                await user.save();
+                res.status(201).send({ ok: true, message: "Creating your account...", user, token: await user.generateAuthToken() });
+            } catch (e) {
+                console.log(e)
+                res.status(500).send({ ok: false, message: e });
+            }
+        });
+
+        app.post("/api/login", (req, res) => {
+            console.log("Signing in...")
+        })
+
+        app.get("/api/verify", (req, res, next) => {
+            let token = req.headers['authorization'].split(' ')[1]; // Express headers are auto converted to lowercase
+
+            require('jsonwebtoken').verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
+                if (err) {
+                    return res.json({
+                        auth: false,
+                        message: 'You are not logged in.',
+                        err
+                    });
+                } else {
+                    return res.json({
+                        auth: true,
+                        message: "You are logged in."
+                    })
+                }
             });
-            res.status(201).send()
+
         })
 
-        app.get("/api/posts", async (req, res) => {
-            const posts = await db.collection("posts");
-            res.send(await posts.find({}).toArray())
-        })
-
-        app.put("/api/posts/:id", async (req, res) => {
-            const posts = await db.collection("posts");
-            console.log(req.body.text, req.params.id)
-            await posts.updateOne({ _id: mongodb.ObjectID(req.params.id) }, { $set: { text: req.body.text } }, (err, res) => {
-                if (err) console.log(err)
-            })
-        })
-
-        app.delete("/api/posts/:id", async (req, res) => {
-            const posts = await db.collection("posts");
-            await posts.deleteOne({ _id: new mongodb.ObjectID(req.params.id) });
-            res.status(200).send()
-        })
-
-        if (process.env.NODE_ENV === "production") {
-            app.use(express.static(__dirname + "/public/"));
-            app.get(/.*/, (req, res) => res.sendFile(__dirname + "/public/index.html"));
-        }
+        app.use(express.static(__dirname + "/public/"));
+        app.get(/.*/, (req, res) => res.sendFile(__dirname + "/public/index.html"));
     }
 }
 

@@ -5,10 +5,11 @@ import VueRouter from "vue-router";
 import Home from "../views/Home";
 import Login from '../views/Login';
 import Signup from '../views/Signup';
-
-
+import Dashboard from '../views/Dashboard';
+import UserService from "../services/UserService";
 
 Vue.use(VueRouter);
+
 
 const router = new VueRouter({
     routes: [
@@ -26,8 +27,19 @@ const router = new VueRouter({
             path: '/register',
             name: 'Signup',
             component: Signup
+        },
+        {
+            path: '/dashboard',
+            name: 'Dashboard',
+            component: Dashboard,
+            beforeEnter: async (to, from, next) => {
+                const auth = await UserService.guard();
+                if (!auth) next("/")
+                else next()
+            }
         }
     ]
 })
+
 
 export default router;
