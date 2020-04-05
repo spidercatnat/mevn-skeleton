@@ -88,7 +88,6 @@
 </template>
 
 <script>
-import UserService from "../services/UserService";
 export default {
   name: "TheSignup",
   data() {
@@ -111,10 +110,9 @@ export default {
       };
       try {
         this.loading = true;
-        const res = await UserService.createUser(newUser);
-        this.success = res.message;
         // TODO: Save the user._id, name, email fields to Vuex store
-        await localStorage.setItem("bztoken", res.token);
+        const res = await this.$store.dispatch("user/signup", newUser);
+        this.success = res;
         setTimeout(() => {
           this.$router.push("dashboard");
         }, 2000);

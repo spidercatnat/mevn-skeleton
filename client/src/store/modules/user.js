@@ -22,6 +22,13 @@ const actions = {
         commit('setUser', { user: { _id, name, email } })
         return res.message;
     },
+    async signup({ commit }, newUser) {
+        const created = await UserService.createUser(newUser);
+        const res = await UserService.login(newUser);
+        const { _id, name, email } = res.user;
+        commit('setUser', { user: { _id, name, email } })
+        return created.message;
+    },
     async logout({ commit }) {
         await UserService.logout();
         commit('setAuth', false)

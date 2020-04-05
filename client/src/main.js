@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import 'bulma/css/bulma.css'
+import "vue-cal/dist/vuecal.css";
 import store from "./store";
 
 Vue.config.productionTip = false

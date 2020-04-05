@@ -20,9 +20,6 @@ export default {
   computed: {
     ...mapGetters(["user/userInfo"]),
   },
-  created() {
-    console.log(this["user/userInfo"]);
-  },
 };
 </script>
 
