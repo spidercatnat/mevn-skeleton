@@ -28,7 +28,7 @@
                     Log in
                   </h1>
                   <h2 class="subtitle">
-                    Manage appointments fromy your BarberZen dashboard.
+                    Manage appointments from your BarberZen dashboard.
                   </h2>
                 </div>
               </div>

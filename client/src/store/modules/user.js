@@ -2,12 +2,12 @@ import UserService from "../../services/UserService";
 
 const state = {
     loggedIn: (async () => await UserService.guard())(),
-    userInfo: ''
+    userInfo: { name: "Guest User" }
 };
 
 const getters = {
     authStatus: (state) => state.loggedIn,
-    userInfo: (state) => state.user
+    userInfo: (state) => state.userInfo
 };
 
 const actions = {

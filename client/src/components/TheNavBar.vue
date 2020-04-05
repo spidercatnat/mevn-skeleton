@@ -52,7 +52,7 @@
         <div class="navbar-item" v-if="this['user/authStatus']">
           <router-link to="dashboard">
             <small
-              >Hi, {{ this["user/userInfo"].user.name.split(" ")[0] }}!</small
+              >Hi, {{ this["user/userInfo"].name.split(" ")[0] }}!</small
             >
           </router-link>
         </div>

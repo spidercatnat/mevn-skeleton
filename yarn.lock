@@ -1882,6 +1882,11 @@ vary@^1, vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
+vue-cal@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/vue-cal/-/vue-cal-3.0.2.tgz#925dfe32c1bbaa269a09283370bcd4328cec3425"
+  integrity sha512-vPna3c/igbze+mgr0Ke1sO1dFdD4TReiYATVxwkbYxC/5lSwOuFfqKAtqDajBWjf+AFYrqHQ5XtenPl+jEoX2g==
+
 vuex-persistedstate@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/vuex-persistedstate/-/vuex-persistedstate-3.0.1.tgz#6eacc3c416fe8cfe63c40d3ee7b8ed13aac4f04f"
