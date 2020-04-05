@@ -1,7 +1,7 @@
 import UserService from "../../services/UserService";
 
 const state = {
-    loggedIn: false,
+    loggedIn: (async () => await UserService.guard())(),
     user: ''
 };
 
@@ -32,6 +32,7 @@ const actions = {
 const mutations = {
     setAuth: (state, loggedIn) => {
         state.loggedIn = loggedIn
+        if (!loggedIn) state.user = "";
     },
     setUser: (state, user) => {
         state.user = user;

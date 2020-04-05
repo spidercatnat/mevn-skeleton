@@ -32,7 +32,8 @@ const userSchema = Schema({
             type: String,
             required: true
         }
-    }]
+    }],
+    admin: Boolean
 })
 userSchema.pre('save', function (next) {
     const user = this;
