@@ -23,6 +23,10 @@ const actions = {
         localStorage.setItem("bztoken", res.token);
         return res.message;
     },
+    async logout({ commit }) {
+        await UserService.logout();
+        commit('setAuth', false)
+    }
 };
 
 const mutations = {

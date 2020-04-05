@@ -51,7 +51,11 @@
             <router-link class="button is-primary" to="/register">
               <strong>Sign up</strong>
             </router-link>
-            <router-link class="button is-light" to="/login" v-if="!loggedIn">
+            <router-link
+              class="button is-light"
+              to="/login"
+              v-if="!this['user/authStatus']"
+            >
               Log in
             </router-link>
             <a class="button is-light" to="/login" @click="logout" v-else
@@ -65,8 +69,7 @@
 </template>
 
 <script>
-import UserService from "../services/UserService";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "TheNavBar",
   data() {
@@ -75,9 +78,7 @@ export default {
       loggedIn: false,
     };
   },
-  async updated() {
-    this.loggedIn = await this["user/auth"]();
-  },
+  computed: mapGetters(["user/authStatus"]),
   methods: {
     ...mapActions(["user/auth"]),
     toggleMenu() {
@@ -86,9 +87,9 @@ export default {
       }, 100);
     },
     async logout() {
-      await UserService.logout();
+      await this.$store.dispatch("user/logout");
       await this.$router.push("/");
-      this.toggleMenu()
+      this.toggleMenu();
     },
   },
 };
