@@ -29,6 +29,17 @@ class UserService {
         })
     }
 
+    static logout() {
+        return new Promise((resolve, reject) => {
+            const error = false;
+            localStorage.removeItem("bztoken");
+            resolve();
+            if (error) reject()
+        })
+        // TODO: post request to /logout to remove token from user in db. 
+        // needs user info in vuex store to achieve this outcome
+    }
+
     static guard() {
         const token = localStorage.getItem("bztoken");
         return new Promise((resolve, reject) => {

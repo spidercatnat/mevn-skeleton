@@ -55,8 +55,19 @@ class Routing {
                 res.send({ user, token, message: "Logging in..." })
             } catch (e) {
                 res.status(400).send({ ok: false, message: "Please double-check your credentials."});
+            } 
+        });
+
+        app.post("/api/logout", async (req, res) => {
+            try {
+                req.user.tokens = req.user.tokens.filter((token) => {
+                    return token.token != req.token
+                })
+                await req.user.save()
+                res.send()
+            } catch (error) {
+                res.status(500).send(error)
             }
-            
         })
 
         app.get("/api/verify", (req, res, next) => {

@@ -11,7 +11,6 @@
       >
     </div>
     <progress class="progress is-small is-primary" v-if="loading" />
-
     <div class="box">
       <form class="signup" @submit="onSubmit">
         <div>
@@ -106,7 +105,9 @@ export default {
         this.loading = true;
         const res = await UserService.login(creds);
         this.success = res.message;
+
         // TODO: Save the user._id, name, email fields to Vuex store
+        
         await localStorage.setItem("bztoken", res.token);
         setTimeout(() => {
           this.$router.push("dashboard");

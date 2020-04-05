@@ -1,5 +1,9 @@
 <template>
-  <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+  <nav
+    class="navbar is-fixed-top"
+    role="navigation"
+    aria-label="main navigation"
+  >
     <div class="navbar-brand">
       <router-link class="navbar-item" to="/">
         <img
@@ -31,9 +35,7 @@
       <div class="navbar-start">
         <div class="navbar-item">
           <div class="buttons">
-            <a
-              class="button is-small is-inverted is-primary ripple"
-            >
+            <a class="button is-small is-inverted is-primary ripple">
               <strong>Book Now</strong>
             </a>
           </div>
@@ -43,16 +45,13 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-primary">
-              <router-link tag='span' to="/register">
-                <strong>Sign up</strong>
-              </router-link>
-            </a>
-            <a class="button is-light">
-              <router-link tag='span' to="/login">
-                Log in
-              </router-link>
-            </a>
+            <router-link class="button is-primary" to="/register">
+              <strong>Sign up</strong>
+            </router-link>
+            <router-link class="button is-light" to="/login" v-if="!loggedIn">
+              Log in
+            </router-link>
+            <a class="button is-light" to="/login" @click="logout" v-else>Logout</a>
           </div>
         </div>
       </div>
@@ -61,17 +60,28 @@
 </template>
 
 <script>
+import UserService from "../services/UserService";
 export default {
   name: "TheNavBar",
   data() {
     return {
       isActive: false,
+      loggedIn: false,
     };
+  },
+  async created() {
+    // This should also be stored in the Vuex store
+    // It's not updating because the header is persistent
+    this.loggedIn = await UserService.guard();
   },
   methods: {
     openMenu() {
       this.isActive = !this.isActive;
     },
+    async logout() {
+      await UserService.logout();
+      this.$router.push("/");
+    }
   },
 };
 </script>
