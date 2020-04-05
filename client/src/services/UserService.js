@@ -16,12 +16,14 @@ class UserService {
         })
     }
 
+
     static login(creds) {
         return new Promise((resolve, reject) => {
             (async (creds) => {
                 try {
-                    const { data: req } = await axios.post(`${url}/login`, { ...creds });
-                    resolve(req);
+                    const { data } = await axios.post(`${url}/login`, { ...creds });
+                    localStorage.setItem("bztoken", data.token);
+                    resolve(data);
                 } catch (e) {
                     reject(e.response.data);
                 }
@@ -33,6 +35,7 @@ class UserService {
         return new Promise((resolve, reject) => {
             const error = false;
             localStorage.removeItem("bztoken");
+            sessionStorage.clear();
             resolve();
             if (error) reject()
         })

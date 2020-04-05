@@ -6,6 +6,7 @@ import Home from "../views/Home";
 import Login from '../views/Login';
 import Signup from '../views/Signup';
 import Dashboard from '../views/Dashboard';
+import Schedule from '../views/Schedule';
 import UserService from "../services/UserService";
 
 Vue.use(VueRouter);
@@ -15,7 +16,7 @@ const router = new VueRouter({
         {
             path: '/',
             name: 'Home',
-            component: Home
+            component: Home,
         },
         {
             path: '/login',
@@ -31,19 +32,24 @@ const router = new VueRouter({
             path: '/dashboard',
             name: 'Dashboard',
             component: Dashboard,
-        }
+        },
+        {
+            path: '/schedule',
+            name: 'Schedule',
+            component: Schedule,
+        },
     ]
 })
 
 router.beforeEach(async (to, from, next) => {
     // redirect to login page if not logged in and trying to access a restricted page
-    const publicPages = ['/', '/register','/login'];
+    const publicPages = ['/', '/register', '/login'];
     const authRequired = !publicPages.includes(to.path);
     const loggedIn = await UserService.guard();
     if (authRequired && !loggedIn) {
         return next('/login');
     }
-    next();
+    next()
 })
 
 

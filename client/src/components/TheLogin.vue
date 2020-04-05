@@ -12,7 +12,7 @@
     </div>
     <progress class="progress is-small is-primary" v-if="loading" />
     <div class="box">
-      <form class="signup" @submit="onSubmit">
+      <form class="signup" @submit="login">
         <div>
           <div class="level-left">
             <div class="level-item">
@@ -93,7 +93,7 @@ export default {
     };
   },
   methods: {
-    async onSubmit(e) {
+    async login(e) {
       e.preventDefault();
       const creds = {
         email: this.email,

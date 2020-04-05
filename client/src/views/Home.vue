@@ -1,5 +1,11 @@
 <template>
-<div></div>
+<div class="content">
+    <section class="section">
+      <div class="container">
+        Home Page
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>

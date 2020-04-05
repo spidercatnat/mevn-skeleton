@@ -2,12 +2,12 @@ import UserService from "../../services/UserService";
 
 const state = {
     loggedIn: (async () => await UserService.guard())(),
-    user: ''
+    userInfo: ''
 };
 
 const getters = {
     authStatus: (state) => state.loggedIn,
-    getUser: (state) => state.user
+    userInfo: (state) => state.user
 };
 
 const actions = {
@@ -20,7 +20,6 @@ const actions = {
         const res = await UserService.login(creds);
         const { _id, name, email } = res.user;
         commit('setUser', { user: { _id, name, email } })
-        localStorage.setItem("bztoken", res.token);
         return res.message;
     },
     async logout({ commit }) {
@@ -32,10 +31,10 @@ const actions = {
 const mutations = {
     setAuth: (state, loggedIn) => {
         state.loggedIn = loggedIn
-        if (!loggedIn) state.user = "";
+        if (!loggedIn) state.userInfo = "";
     },
-    setUser: (state, user) => {
-        state.user = user;
+    setUser: (state, { user }) => {
+        state.userInfo = user;
         state.loggedIn = true;
     }
 };

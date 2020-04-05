@@ -38,17 +38,31 @@
       <div class="navbar-start">
         <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-small is-inverted is-primary ripple">
+            <router-link
+              to="schedule"
+              class="button is-small is-inverted is-primary ripple"
+            >
               <strong>Book Now</strong>
-            </a>
+            </router-link>
           </div>
         </div>
       </div>
 
       <div class="navbar-end">
+        <div class="navbar-item" v-if="this['user/authStatus']">
+          <router-link to="dashboard">
+            <small
+              >Hi, {{ this["user/userInfo"].user.name.split(" ")[0] }}!</small
+            >
+          </router-link>
+        </div>
         <div class="navbar-item">
           <div class="buttons">
-            <router-link class="button is-primary" to="/register">
+            <router-link
+              class="button is-primary"
+              to="/register"
+              v-if="!this['user/authStatus']"
+            >
               <strong>Sign up</strong>
             </router-link>
             <router-link
@@ -78,7 +92,13 @@ export default {
       loggedIn: false,
     };
   },
-  computed: mapGetters(["user/authStatus"]),
+  computed: {
+    ...mapGetters(["user/userInfo"]),
+    ...mapGetters(["user/authStatus"]),
+  },
+  async created() {
+    await this["user/auth"]();
+  },
   methods: {
     ...mapActions(["user/auth"]),
     toggleMenu() {
