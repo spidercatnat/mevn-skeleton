@@ -23,6 +23,8 @@ class UserService {
                 try {
                     const { data } = await axios.post(`${url}/login`, { ...creds });
                     localStorage.setItem("bztoken", data.token);
+                    console.log("newtoken")
+
                     resolve(data);
                 } catch (e) {
                     reject(e.response.data);
@@ -33,14 +35,24 @@ class UserService {
 
     static logout() {
         return new Promise((resolve, reject) => {
-            const error = false;
-            localStorage.removeItem("bztoken");
-            sessionStorage.clear();
-            resolve();
-            if (error) reject()
+            try {
+                const token = localStorage.getItem("bztoken");
+                (async () => {
+                    await axios.get(`${url}/logout`, {
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    })
+                })()
+                localStorage.removeItem("bztoken");
+                sessionStorage.clear();
+                resolve();
+            } catch (error) {
+                reject(error)
+            }
+
         })
         // TODO: post request to /logout to remove token from user in db. 
-        // needs user info in vuex store to achieve this outcome
     }
 
     static guard() {

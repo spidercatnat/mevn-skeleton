@@ -110,7 +110,6 @@ export default {
       };
       try {
         this.loading = true;
-        // TODO: Save the user._id, name, email fields to Vuex store
         const res = await this.$store.dispatch("user/signup", newUser);
         this.success = res;
         setTimeout(() => {
