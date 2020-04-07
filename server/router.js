@@ -105,6 +105,20 @@ class Routing {
             console.log(appointments);
         });
 
+        /** UPDATE APPOINTMENT
+         * 
+         */
+        app.put("/api/update-appointment", async (req, res) => {
+            console.log("Updating appointment...")
+        });
+
+        /** DELETE APPOINTMENT
+         * 
+         */
+        app.delete("/api/cancel-appointment", async (req, res) => {
+            console.log("Canceling appointment...")
+        })
+
         /** LOGIN
          *  Parses the data from the request and uses it to look up account info in MongoDB.
          *  If successful, a JSON Web Token is generated, signed, and sent back to the user.
