@@ -3,42 +3,8 @@ const morgan = require("morgan"); // Morgan for debugging logs
 const cors = require("cors"); // Enables CORS for local API development
 const bodyParser = require("body-parser"); // JSON utility
 const { db } = require("./db"); // Database connection
-const { User, Haircut } = require("./db/models") // User model
-
-
-/** AUTH
- *  Authorization middleware for protected routes.
- *  Decodes the user's ID from the token and searches MongoDB.
- */
-const auth = async (req, res, next) => {
-    let token = req.headers['authorization'].split(' ')[1]; // Express headers are auto converted to lowercase
-    require('jsonwebtoken').verify(token, process.env.TOKEN_SECRET, async (err, decoded) => {
-        if (err) {
-            return res.json({
-                auth: false,
-                message: 'You are not logged in.',
-                err
-            });
-        } else {
-            try {
-                const user = await User.findOne({ _id: decoded._id, 'tokens.token': token })
-                if (!user) {
-                    throw new Error()
-                }
-                req.user = user
-                req.token = token
-                res.json({
-                    auth: true,
-                    message: "You are logged in."
-                })
-                next()
-            } catch (error) {
-                console.log(error)
-            }
-        }
-    });
-}
-
+const { User, Haircut } = require("./models") // Models
+const { auth } = require("./middleware"); // Auth middleware
 /** Routing
  *  A class that configures middleware and initializes endpoints for the REST API.
  */
@@ -56,7 +22,7 @@ class Routing {
         app.use(bodyParser.text({ type: "text/*" }));
         app.disable("x-powered-by");
         app.use(express.static(__dirname + "/public/"));
-        db.connect()
+        db.connect();
     }
 
     init() {
@@ -78,18 +44,17 @@ class Routing {
         /** CREATE APPOINTMENT
          *  Write operation for appointments in MongoDB.
          */
-        app.post("/api/new-appointment", async (req, res) => {
-            console.log("Creating appointment...");
-            const { customerID, title, time } = req.body.haircut;
+        app.post("/api/new-appointment", auth, async (req, res) => {
+            const { title, start, end } = req.body.haircut;
             const appointment = {
-                customerID: new require('mongoose').Types.ObjectId(customerID),
+                customerID: new require('mongoose').Types.ObjectId(req.user._id),
                 title,
-                time
+                start,
+                end
             }
             try {
                 const haircut = new Haircut(appointment);
                 await haircut.save();
-                res.status(201).send("Appointment booked!")
             } catch(e) {
                 console.log(e);
                 res.status(500).send("Error creating new appointment!")
@@ -101,7 +66,7 @@ class Routing {
          *  Gets all appointments associated with the user's ID.
          */
         app.get("/api/all-appointments", async (req, res) => {
-            const appointments = await Haircut.find({ customerID: req.body.customerID })
+            const appointments = await Haircut.find({ customerID: req.user._id })
             console.log(appointments);
         });
 
@@ -117,7 +82,7 @@ class Routing {
          */
         app.delete("/api/cancel-appointment", async (req, res) => {
             console.log("Canceling appointment...")
-        })
+        });
 
         /** LOGIN
          *  Parses the data from the request and uses it to look up account info in MongoDB.

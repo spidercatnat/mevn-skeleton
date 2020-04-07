@@ -13,18 +13,22 @@
           editable-events
           :cell-click-hold="false"
           v-bind:snap-to-time="5"
-          @event-drop="onEventDrop"
+          @event-change="onChange"
           @cell-dblclick="
             $refs.vuecal.createEvent($event, 120, {
               title: `${username.split(' ')[0]}'s haircut`,
               class: 'appointment',
             })
           "
-          :on-event-create="onEventCreate"
         />
       </div>
       <div class="has-text-right">
-        <button class="button is-primary" @click="scheduleHaircut">Finish scheduling my appointment</button>
+        <button class="button is-primary is-loading" v-if="success">
+          Finish scheduling my appointment
+        </button>
+        <button class="button is-primary" @click="scheduleHaircut" v-else>
+          Finish scheduling my appointment
+        </button>
       </div>
     </div>
   </div>
@@ -35,7 +39,7 @@ import { mapGetters } from "vuex";
 import VueCal from "vue-cal";
 import "vue-cal/dist/drag-and-drop.js";
 import "vue-cal/dist/vuecal.css";
-
+import AppointmentService from "../services/AppointmentService"
 // function getFormattedDate(date) {
 //   const year = date.getFullYear();
 
@@ -57,6 +61,7 @@ export default {
       selectedEvent: {},
       events: [],
       username: "Natalie",
+      success: false,
     };
   },
   computed: {
@@ -66,21 +71,27 @@ export default {
     this.username = this["user/userInfo"].name;
   },
   methods: {
-    onEventCreate(event) {
-      if (this.events.length) return;
-      console.log("created event", event);
-      this.events = [event];
-    },
-    onEventDrop({ event }) {
+    onChange({ event }) {
       this.events = [event];
     },
     closeModal() {
       this.active = false;
     },
-    scheduleHaircut() {
-        if(!this.events.length) return console.log("Please choose an available time.")
-        console.log("Scheduling", this.events[0])
-    }
+    async scheduleHaircut() {
+      if (!this.events.length)
+        return console.log("Please choose an available time.");
+      const { start, end, title } = this.events[0];
+      const haircut = {
+        start,
+        end,
+        title,
+      };
+      AppointmentService.create(haircut);
+      this.success = true;
+      setTimeout(() => {
+        this.$router.push("dashboard");
+      }, 2000);
+    },
   },
 };
 </script>
