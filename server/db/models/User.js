@@ -33,8 +33,8 @@ const userSchema = Schema({
             required: true
         }
     }],
-    admin: Boolean
-})
+});
+
 userSchema.pre('save', function (next) {
     const user = this;
     // only hash the password if it has been modified (or is new)
@@ -67,15 +67,6 @@ userSchema.statics.findByCredentials = async (email, password) => {
     }
     return user
 }
-
-
-
-userSchema.methods.comparePassword = function (candidatePassword, cb) {
-    bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
-        if (err) return cb(err);
-        cb(isMatch);
-    });
-};
 
 const User = mongoose.model('User', userSchema)
 

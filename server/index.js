@@ -1,6 +1,9 @@
-require("dotenv").config();
-const express = require("express");
-const app = express();
+/** server/index.js
+ * This is the entrypoint for our backend. 
+ * Here we set up environment variables, and initialize the REST API.
+ */
+require("dotenv").config(); 
+const app = require("express")();
 const router = require("./router");
 
 async function start() {
