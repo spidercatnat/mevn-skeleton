@@ -22,7 +22,8 @@ const auth = async (req, res, next) => {
                 req.token = token
                 res.json({
                     auth: true,
-                    message: "You are logged in."
+                    message: "You are logged in.",
+                    user
                 })
                 next()
             } catch (error) {

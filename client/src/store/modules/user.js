@@ -12,9 +12,9 @@ const getters = {
 
 const actions = {
     async auth({ commit }, token) {
-        const _token = UserService.guard(token);
-        commit('setAuth', await _token);
-        return _token;
+        const payload = UserService.guard(token);
+        commit('setAuth', await payload);
+        return payload;
     },
     async login({ commit }, creds) {
         const res = await UserService.login(creds);
@@ -36,9 +36,10 @@ const actions = {
 };
 
 const mutations = {
-    setAuth: (state, loggedIn) => {
-        state.loggedIn = loggedIn
-        if (!loggedIn) state.userInfo = "";
+    setAuth: (state, payload) => {
+        state.loggedIn = payload.auth
+        if (!payload.auth) return state.userInfo = "";
+        state.userInfo = payload.userInfo
     },
     setUser: (state, { user }) => {
         state.userInfo = user;

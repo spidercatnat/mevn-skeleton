@@ -60,13 +60,20 @@ class UserService {
         return new Promise((resolve, reject) => {
             (async (token) => {
                 try {
-                    const res = await axios.get(`${url}/verify`, {
+                    let res = await axios.get(`${url}/verify`, {
                         headers: {
                             "Authorization": `Bearer ${token}`
                         }
                     });
-                    resolve(res.data.auth)
+                    if (res.data.user) {
+                        delete res.data.user.password;
+                        delete res.data.user.tokens;
+                        resolve({ auth: res.data.auth, userInfo: { ...res.data.user } })
+                    } else {
+                        resolve({ auth: res.data.auth })
+                    }
                 } catch (e) {
+                    console.log(e)
                     reject(false);
                 }
             })(token)
