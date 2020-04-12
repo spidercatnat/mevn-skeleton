@@ -3,8 +3,8 @@
     <div class="container">
       <div class="box">
         <div class="field">
-          <div class="control">
-            <div class="select is-rounded is-primary">
+          <div class="control is-expanded">
+            <div class="select is-rounded is-primary is-fullwidth">
               <select v-model="hairdresser" @change="onSelect($event)">
                 <option disabled value="">Select a barber</option>
                 <option>Barber A</option>
@@ -13,6 +13,7 @@
               </select>
             </div>
           </div>
+
         </div>
         <vue-cal
           ref="vuecal"
@@ -29,7 +30,7 @@
           @cell-dblclick="
             $refs.vuecal.createEvent($event, 30, {
               title: `Haircut with Barber A`,
-              class: 'appointment',
+              class: 'appointment'
             })
           "
         />
@@ -87,11 +88,11 @@ export default {
       events: [],
       username: "Natalie",
       success: false,
-      hairdresser: "",
+      hairdresser: ""
     };
   },
   computed: {
-    ...mapGetters(["user/userInfo"]),
+    ...mapGetters(["user/userInfo"])
   },
   created() {
     this.username = this["user/userInfo"].name;
@@ -130,8 +131,8 @@ export default {
       // setTimeout(() => {
       //   this.$router.push("dashboard");
       // }, 2000);
-    },
-  },
+    }
+  }
 };
 </script>
 
