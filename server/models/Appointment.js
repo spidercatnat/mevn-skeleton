@@ -3,8 +3,15 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const appointmentSchema = Schema({
-    customerID: Schema.ObjectId,
-    barber: String,
+    open: {
+        type: Boolean,
+    },
+    customerID: {
+        type: Schema.ObjectId
+    },
+    barberID: {
+        type: Schema.ObjectId
+    },
     title: {
         type: String,
         required: true,

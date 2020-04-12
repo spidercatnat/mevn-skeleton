@@ -38,7 +38,6 @@ const mutations = {
     setAuth: (state, payload) => {
         state.userInfo = payload.userInfo
         state.loggedIn = payload.loggedIn
-        console.log(payload.loggedIn)
         if (!payload.loggedIn) return state.userInfo = "";
     },
     setUser: (state, { user }) => {

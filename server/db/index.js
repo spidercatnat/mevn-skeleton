@@ -10,6 +10,7 @@ const db = {
             console.log("Mongoose connection is open");
         });
         await mongoose.connect(MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true });
+        return mongoose.connection;
     }
 }
 

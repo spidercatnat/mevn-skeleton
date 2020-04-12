@@ -1,3 +1,5 @@
-exports.User = require("./User");
-exports.Appointment = require("./Appointment");
- 
+module.exports = {
+    User: require("./User"),
+    Appointment: require("./Appointment"),
+    Barber: require("./Barber")
+}

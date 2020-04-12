@@ -6,14 +6,13 @@
           <div class="control is-expanded">
             <div class="select is-rounded is-primary is-fullwidth">
               <select v-model="hairdresser" @change="onSelect($event)">
-                <option disabled value="">Select a barber</option>
+                <option disabled value="">Select a barber...</option>
                 <option>Barber A</option>
                 <option>Barber B</option>
                 <option>Barber C</option>
               </select>
             </div>
           </div>
-
         </div>
         <vue-cal
           ref="vuecal"
@@ -23,16 +22,9 @@
           :disable-views="['years', 'year', 'month']"
           :events="events"
           :twelve-hour="true"
-          editable-events
           :cell-click-hold="false"
           v-bind:snap-to-time="5"
           :on-event-click="onEventClick"
-          @cell-dblclick="
-            $refs.vuecal.createEvent($event, 30, {
-              title: `Haircut with Barber A`,
-              class: 'appointment'
-            })
-          "
         />
       </div>
       <!-- <div class="has-text-right">
@@ -97,7 +89,25 @@ export default {
   created() {
     this.username = this["user/userInfo"].name;
   },
+  mounted() {
+    this.createEvent();
+  },
   methods: {
+    createEvent() {
+      // Check if date format is correct before creating event.
+      this.$refs.vuecal.createEvent(
+        // Formatted start date and time or JavaScript Date object.
+        "4-12-2020 13:15",
+        // Event duration in minutes (Integer).
+        120,
+        // Custom event props (optional).
+        {
+          title: "New Event",
+          content: "yay! 🎉",
+          class: "appointment"
+        }
+      );
+    },
     modalClose() {
       this.active = false;
     },
@@ -111,7 +121,9 @@ export default {
       console.log(e.target.value);
       return e;
     },
-    onEventClick() {
+    onEventClick(event) {
+      console.log(event);
+
       this.active = true;
     },
     closeModal() {
