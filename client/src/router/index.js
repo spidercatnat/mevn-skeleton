@@ -7,7 +7,7 @@ import Login from '../views/Login';
 import Signup from '../views/Signup';
 import Dashboard from '../views/Dashboard';
 import Schedule from '../views/Schedule';
-import UserService from "../services/UserService";
+import store from "../store"
 
 Vue.use(VueRouter);
 
@@ -45,7 +45,7 @@ router.beforeEach(async (to, from, next) => {
     // redirect to login page if not logged in and trying to access a restricted page
     const publicPages = ['/', '/register', '/login'];
     const authRequired = !publicPages.includes(to.path);
-    const loggedIn = await UserService.guard();
+    const loggedIn = store.state.user.loggedIn;
     if (authRequired && !loggedIn) {
         return next('/login');
     }

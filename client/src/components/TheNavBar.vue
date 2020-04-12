@@ -83,24 +83,19 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   name: "TheNavBar",
   data() {
     return {
       isActive: false,
-      loggedIn: false,
     };
   },
   computed: {
     ...mapGetters(["user/userInfo"]),
     ...mapGetters(["user/authStatus"]),
   },
-  async created() {
-    await this["user/auth"]();
-  },
   methods: {
-    ...mapActions(["user/auth"]),
     toggleMenu() {
       setTimeout(() => {
         this.isActive = !this.isActive;

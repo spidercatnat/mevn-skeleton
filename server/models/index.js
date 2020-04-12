@@ -1,2 +1,3 @@
 exports.User = require("./User");
-exports.Haircut= require("./Haircut");
+exports.Appointment = require("./Appointment");
+ 

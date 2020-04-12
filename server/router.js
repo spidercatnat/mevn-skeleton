@@ -3,7 +3,7 @@ const morgan = require("morgan"); // Morgan for debugging logs
 const cors = require("cors"); // Enables CORS for local API development
 const bodyParser = require("body-parser"); // JSON utility
 const { db } = require("./db"); // Database connection
-const { User, Haircut } = require("./models") // Models
+const { User, Appointment } = require("./models") // Models
 const { auth } = require("./middleware"); // Auth middleware
 /** Routing
  *  A class that configures middleware and initializes endpoints for the REST API.
@@ -53,7 +53,7 @@ class Routing {
                 end
             }
             try {
-                const haircut = new Haircut(appointment);
+                const haircut = new Appointment(appointment);
                 await haircut.save();
             } catch(e) {
                 console.log(e);

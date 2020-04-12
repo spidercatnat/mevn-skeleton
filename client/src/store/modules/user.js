@@ -1,9 +1,9 @@
 import UserService from "../../services/UserService";
 
 const state = {
-    loggedIn: (async () => await UserService.guard())(),
-    userInfo: { name: "Guest User" }
-};
+    loggedIn: false,
+    userInfo: {}
+}
 
 const getters = {
     authStatus: (state) => state.loggedIn,
@@ -12,9 +12,8 @@ const getters = {
 
 const actions = {
     async auth({ commit }, token) {
-        const payload = UserService.guard(token);
+        const payload = UserService.verify(token);
         commit('setAuth', await payload);
-        return payload;
     },
     async login({ commit }, creds) {
         const res = await UserService.login(creds);
@@ -37,9 +36,10 @@ const actions = {
 
 const mutations = {
     setAuth: (state, payload) => {
-        state.loggedIn = payload.auth
-        if (!payload.auth) return state.userInfo = "";
         state.userInfo = payload.userInfo
+        state.loggedIn = payload.loggedIn
+        console.log(payload.loggedIn)
+        if (!payload.loggedIn) return state.userInfo = "";
     },
     setUser: (state, { user }) => {
         state.userInfo = user;

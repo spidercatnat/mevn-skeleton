@@ -52,10 +52,9 @@ class UserService {
             }
 
         })
-        // TODO: post request to /logout to remove token from user in db. 
     }
 
-    static guard() {
+    static verify() {
         const token = localStorage.getItem("bztoken");
         return new Promise((resolve, reject) => {
             (async (token) => {
@@ -68,13 +67,13 @@ class UserService {
                     if (res.data.user) {
                         delete res.data.user.password;
                         delete res.data.user.tokens;
-                        resolve({ auth: res.data.auth, userInfo: { ...res.data.user } })
+                        return resolve({ loggedIn: res.data.auth, userInfo: { ...res.data.user } })
                     } else {
-                        resolve({ auth: res.data.auth })
+                        return resolve({ loggedIn: res.data.auth })
                     }
                 } catch (e) {
                     console.log(e)
-                    reject(false);
+                    return reject(false);
                 }
             })(token)
         })

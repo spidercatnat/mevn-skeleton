@@ -12,5 +12,8 @@ export default {
   components: {
     TheNavBar,
   },
+  created() {
+    this.$store.dispatch('user/auth')
+  }
 };
 </script>

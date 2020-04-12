@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const haircutSchema = Schema({
+const appointmentSchema = Schema({
     customerID: Schema.ObjectId,
+    barber: String,
     title: {
         type: String,
         required: true,
@@ -21,6 +22,6 @@ const haircutSchema = Schema({
     }
 });
 
-const Haircut = mongoose.model('Haircut', haircutSchema)
+const Appointment = mongoose.model('Appointment', appointmentSchema)
 
-module.exports = Haircut;
+module.exports = Appointment;

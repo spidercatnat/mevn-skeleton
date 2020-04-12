@@ -2,6 +2,18 @@
   <div>
     <div class="container">
       <div class="box">
+        <div class="field">
+          <div class="control">
+            <div class="select is-rounded is-primary">
+              <select v-model="hairdresser" @change="onSelect($event)">
+                <option disabled value="">Select a barber</option>
+                <option>Barber A</option>
+                <option>Barber B</option>
+                <option>Barber C</option>
+              </select>
+            </div>
+          </div>
+        </div>
         <vue-cal
           ref="vuecal"
           style="height: 60vh;"
@@ -13,22 +25,46 @@
           editable-events
           :cell-click-hold="false"
           v-bind:snap-to-time="5"
-          @event-change="onChange"
+          :on-event-click="onEventClick"
           @cell-dblclick="
-            $refs.vuecal.createEvent($event, 120, {
-              title: `${username.split(' ')[0]}'s haircut`,
+            $refs.vuecal.createEvent($event, 30, {
+              title: `Haircut with Barber A`,
               class: 'appointment',
             })
           "
         />
       </div>
-      <div class="has-text-right">
+      <!-- <div class="has-text-right">
         <button class="button is-primary is-loading" v-if="success">
           Finish scheduling my appointment
         </button>
         <button class="button is-primary" @click="scheduleHaircut" v-else>
           Finish scheduling my appointment
         </button>
+      </div> -->
+    </div>
+    <div class="modal" v-bind:class="{ 'is-active': active }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Confirm your appointment</p>
+          <button
+            class="delete"
+            aria-label="close"
+            @click="modalClose"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <p>Who: Barber X</p>
+          <p>When: hh:mm</p>
+          <p>Where: At our downtown location</p>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-primary" @click="onConfirm">
+            I'll take it!
+          </button>
+          <button class="button" @click="modalClose">Nevermind.</button>
+        </footer>
       </div>
     </div>
   </div>
@@ -39,18 +75,7 @@ import { mapGetters } from "vuex";
 import VueCal from "vue-cal";
 import "vue-cal/dist/drag-and-drop.js";
 import "vue-cal/dist/vuecal.css";
-import AppointmentService from "../services/AppointmentService"
-// function getFormattedDate(date) {
-//   const year = date.getFullYear();
-
-//   let month = (1 + date.getMonth()).toString();
-//   month = month.length > 1 ? month : "0" + month;
-
-//   let day = date.getDate().toString();
-//   day = day.length > 1 ? day : "0" + day;
-
-//   return month + "/" + day + "/" + year;
-// }
+// import AppointmentService from "../services/AppointmentService";
 
 export default {
   name: "TheCalendar",
@@ -62,6 +87,7 @@ export default {
       events: [],
       username: "Natalie",
       success: false,
+      hairdresser: "",
     };
   },
   computed: {
@@ -71,26 +97,39 @@ export default {
     this.username = this["user/userInfo"].name;
   },
   methods: {
+    modalClose() {
+      this.active = false;
+    },
+    onConfirm() {
+      this.modalClose();
+    },
     onChange({ event }) {
-      this.events = [event];
+      this.events.push(event);
+    },
+    onSelect(e) {
+      console.log(e.target.value);
+      return e;
+    },
+    onEventClick() {
+      this.active = true;
     },
     closeModal() {
       this.active = false;
     },
     async scheduleHaircut() {
-      if (!this.events.length)
-        return console.log("Please choose an available time.");
-      const { start, end, title } = this.events[0];
-      const haircut = {
-        start,
-        end,
-        title,
-      };
-      AppointmentService.create(haircut);
-      this.success = true;
-      setTimeout(() => {
-        this.$router.push("dashboard");
-      }, 2000);
+      // if (!this.events.length)
+      //   return console.log("Please choose an available time.");
+      // const { start, end, title } = this.events[0];
+      // const haircut = {
+      //   start,
+      //   end,
+      //   title,
+      // };
+      // AppointmentService.create(haircut);
+      // this.success = true;
+      // setTimeout(() => {
+      //   this.$router.push("dashboard");
+      // }, 2000);
     },
   },
 };
