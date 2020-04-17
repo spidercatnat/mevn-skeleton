@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import { mapGetters } from "vuex";
 import VueCal from "vue-cal";
 import "vue-cal/dist/drag-and-drop.js";
@@ -116,9 +117,9 @@ export default {
     onChange({ event }) {
       this.events.push(event);
     },
-    onSelect(e) {
-      console.log(e.target.value);
-      return e;
+    async onSelect(e) {
+      const res = await axios.get(`/api/available-appointments/${e.target.value}`);
+      console.log(res.data)
     },
     onEventClick(event) {
       console.log(event);

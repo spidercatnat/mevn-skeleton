@@ -3,7 +3,7 @@ const morgan = require("morgan"); // Morgan for debugging logs
 const cors = require("cors"); // Enables CORS for local API development
 const bodyParser = require("body-parser"); // JSON utility
 const { db } = require("./db"); // Database connection
-const { User, Appointment } = require("./models"); // Models
+const { User, Appointment, Barber } = require("./models"); // Models
 const { auth } = require("./middleware"); // Auth middleware
 const {
   user: { signup, login, logout, verify },
@@ -32,7 +32,7 @@ class Routing {
     app.post("/api/signup", signup);
     app.post("/api/login", login);
     app.get("/api/logout", auth, logout);
-    app.get("/api/verify", auth);
+    app.get("/api/verify", auth, (req, res) => console.log("Verifying credentials."));
 
     app.post("/api/new-appointment", auth, async (req, res) => {
       const { title, start, end } = req.body.haircut;
@@ -49,6 +49,13 @@ class Routing {
         console.log(e);
         res.status(500).send("Error creating new appointment!");
       }
+    });
+
+    app.get("/api/available-appointments/:barber", async (req, res) => {
+      console.log(`Getting available appointments for ${req.params.barber}`);
+      const { _id: barberID} = await Barber.findOne({ name: req.params.barber });
+      const appointments = await Appointment.find({ barberID, available: true });
+      res.json(appointments)
     });
 
     app.get("/api/all-appointments", async (req, res) => {
