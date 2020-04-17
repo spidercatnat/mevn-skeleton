@@ -6,7 +6,7 @@
           <div class="control is-expanded">
             <div class="select is-rounded is-primary is-fullwidth">
               <select v-model="hairdresser" @change="onSelect($event)">
-                <option disabled value="">Select a barber...</option>
+                <option disabled value>Select a barber...</option>
                 <option>Barber A</option>
                 <option>Barber B</option>
               </select>
@@ -16,7 +16,7 @@
         <vue-cal
           ref="vuecal"
           style="height: 60vh;"
-          :time-from="9 * 60"
+          :time-from="7 * 60"
           :time-to="23 * 60"
           :disable-views="['years', 'year', 'month']"
           :events="events"
@@ -33,28 +33,22 @@
         <button class="button is-primary" @click="scheduleHaircut" v-else>
           Finish scheduling my appointment
         </button>
-      </div> -->
+      </div>-->
     </div>
     <div class="modal" v-bind:class="{ 'is-active': active }">
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
           <p class="modal-card-title">Confirm your appointment</p>
-          <button
-            class="delete"
-            aria-label="close"
-            @click="modalClose"
-          ></button>
+          <button class="delete" aria-label="close" @click="modalClose"></button>
         </header>
         <section class="modal-card-body">
-          <p>Who: Barber X</p>
-          <p>When: hh:mm</p>
+          <p>Who: {{ selectedBarber }}</p>
+          <p>When: {{ selectedEvent.start }} to {{ selectedEvent.end }}</p>
           <p>Where: At our downtown location</p>
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-primary" @click="onConfirm">
-            I'll take it!
-          </button>
+          <button class="button is-primary" @click="onConfirm">I'll take it!</button>
           <button class="button" @click="modalClose">Nevermind.</button>
         </footer>
       </div>
@@ -76,9 +70,10 @@ export default {
   data() {
     return {
       active: false,
+      selectedBarber: "",
       selectedEvent: {},
       events: [],
-      username: "Natalie",
+      username: "",
       success: false,
       hairdresser: ""
     };
@@ -89,25 +84,7 @@ export default {
   created() {
     this.username = this["user/userInfo"].name;
   },
-  mounted() {
-    this.createEvent();
-  },
   methods: {
-    createEvent() {
-      // Check if date format is correct before creating event.
-      this.$refs.vuecal.createEvent(
-        // Formatted start date and time or JavaScript Date object.
-        "4-12-2020 13:15",
-        // Event duration in minutes (Integer).
-        120,
-        // Custom event props (optional).
-        {
-          title: "New Event",
-          content: "yay! 🎉",
-          class: "appointment"
-        }
-      );
-    },
     modalClose() {
       this.active = false;
     },
@@ -118,12 +95,19 @@ export default {
       this.events.push(event);
     },
     async onSelect(e) {
-      const res = await axios.get(`/api/available-appointments/${e.target.value}`);
-      console.log(res.data)
+      const res = await axios.get(
+        `/api/available-appointments/${e.target.value}`
+      );
+      this.events = res.data.map(({ title, start, end }) => ({
+        title,
+        start,
+        end,
+        class: "appointment"
+      }));
+      this.selectedBarber = e.target.value;
     },
     onEventClick(event) {
-      console.log(event);
-
+      this.selectedEvent = event;
       this.active = true;
     },
     closeModal() {
