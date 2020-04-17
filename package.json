@@ -4,6 +4,7 @@
   "description": "Boilerplate for Mongo, Vue, Express, Node apps.",
   "main": "index.js",
   "scripts": {
+    "setup": "yarn && cd client && yarn",
     "dev": "concurrently \"yarn server\" \"yarn client\"",
     "start": "yarn server",
     "build": "node internals/scripts/build",
@@ -35,8 +36,6 @@
     "mongoose": "^5.9.7",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.2",
-    "validator": "^13.0.0",
-    "vue-cal": "^3.0.2",
-    "vuex-persistedstate": "^3.0.1"
+    "validator": "^13.0.0"
   }
 }

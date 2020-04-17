@@ -9,7 +9,6 @@
                 <option disabled value="">Select a barber...</option>
                 <option>Barber A</option>
                 <option>Barber B</option>
-                <option>Barber C</option>
               </select>
             </div>
           </div>
