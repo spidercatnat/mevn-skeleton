@@ -37,28 +37,10 @@ class Routing {
     );
 
     app.post("/api/new-appointment", auth, async (req, res) => {
-      // 1. Find the appointment by _id in Mongo
-      // 2. Update available to false
-      // 3. Insert customerID into appointment
-
-
-      const appointment = await Appointment.findByIdAndUpdate(req.body._id, { available: false, customerID: req.user._id }).exec()
-      console.log(appointment);
-
-      //   const { title, start, end } = req.body.haircut;
-      //   const appointment = {
-      //     customerID: new require("mongoose").Types.ObjectId(req.user._id),
-      //     title,
-      //     start,
-      //     end,
-      //   };
-      //   try {
-      //     const haircut = new Appointment(appointment);
-      //     await haircut.save();
-      //   } catch (e) {
-      //     console.log(e);
-      //     res.status(500).send("Error creating new appointment!");
-      //   }
+      const appointment = await Appointment.findByIdAndUpdate(req.body._id, {
+        available: false,
+        customerID: req.user._id,
+      }).exec();
     });
 
     app.get("/api/available-appointments/:barber", async (req, res) => {
@@ -74,8 +56,16 @@ class Routing {
     });
 
     app.get("/api/all-appointments", async (req, res) => {
-      const appointments = await Haircut.find({ customerID: req.user._id });
-      console.log(appointments);
+      require("jsonwebtoken").verify(
+        req.headers.authorization.split(" ")[1],
+        process.env.TOKEN_SECRET,
+        async (err, decoded) => {
+          const appointments = await Appointment.find({
+            customerID: decoded._id,
+          });
+          res.json(appointments);
+        }
+      );
     });
 
     app.put("/api/update-appointment", async (req, res) => {

@@ -1,14 +1,8 @@
 <template>
   <div class="content">
-    <section class="section">
-      <div class="container">
-        <h2 class="subtitle">
-          You don't currently have any upcoming appointments.
-          <router-link to="schedule">Book one now!</router-link>
-        </h2>
-        <TheAppointmentList />
-      </div>
-    </section>
+    <div class="container">
+      <TheAppointmentList />
+    </div>
   </div>
 </template>
 
@@ -22,8 +16,8 @@ export default {
     TheAppointmentList
   },
   computed: {
-    ...mapGetters(["user/userInfo"]),
-  },
+    ...mapGetters(["user/userInfo"])
+  }
 };
 </script>
 

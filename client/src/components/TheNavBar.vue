@@ -110,7 +110,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 @keyframes ripple {
   0% {
     box-shadow: 0 4px 10px rgba(65, 242, 255, 0.08),
