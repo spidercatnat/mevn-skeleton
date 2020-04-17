@@ -3,14 +3,14 @@
 import axios from "axios";
 
 class AppointmentService {
-    static create(haircut) {
+    static create(_id) {
         return new Promise((resolve, reject) => {
-            (async (haircut) => {
+            (async (_id) => {
                 const token = localStorage.getItem("bztoken");
                 try {
                     await axios.post(
                         "api/new-appointment",
-                        { haircut },
+                        { _id },
                         {
                             headers: {
                                 Authorization: `Bearer ${token}`,
@@ -22,7 +22,7 @@ class AppointmentService {
                     reject();
                 }
 
-            })(haircut)
+            })(_id)
         })
     }
 

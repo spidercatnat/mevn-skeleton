@@ -32,30 +32,45 @@ class Routing {
     app.post("/api/signup", signup);
     app.post("/api/login", login);
     app.get("/api/logout", auth, logout);
-    app.get("/api/verify", auth, (req, res) => console.log("Verifying credentials."));
+    app.get("/api/verify", auth, (req, res) =>
+      console.log("Verifying credentials.")
+    );
 
     app.post("/api/new-appointment", auth, async (req, res) => {
-      const { title, start, end } = req.body.haircut;
-      const appointment = {
-        customerID: new require("mongoose").Types.ObjectId(req.user._id),
-        title,
-        start,
-        end,
-      };
-      try {
-        const haircut = new Appointment(appointment);
-        await haircut.save();
-      } catch (e) {
-        console.log(e);
-        res.status(500).send("Error creating new appointment!");
-      }
+      // 1. Find the appointment by _id in Mongo
+      // 2. Update available to false
+      // 3. Insert customerID into appointment
+
+
+      const appointment = await Appointment.findByIdAndUpdate(req.body._id, { available: false, customerID: req.user._id }).exec()
+      console.log(appointment);
+
+      //   const { title, start, end } = req.body.haircut;
+      //   const appointment = {
+      //     customerID: new require("mongoose").Types.ObjectId(req.user._id),
+      //     title,
+      //     start,
+      //     end,
+      //   };
+      //   try {
+      //     const haircut = new Appointment(appointment);
+      //     await haircut.save();
+      //   } catch (e) {
+      //     console.log(e);
+      //     res.status(500).send("Error creating new appointment!");
+      //   }
     });
 
     app.get("/api/available-appointments/:barber", async (req, res) => {
       console.log(`Getting available appointments for ${req.params.barber}`);
-      const { _id: barberID} = await Barber.findOne({ name: req.params.barber });
-      const appointments = await Appointment.find({ barberID, available: true });
-      res.json(appointments)
+      const { _id: barberID } = await Barber.findOne({
+        name: req.params.barber,
+      });
+      const appointments = await Appointment.find({
+        barberID,
+        available: true,
+      });
+      res.json(appointments);
     });
 
     app.get("/api/all-appointments", async (req, res) => {

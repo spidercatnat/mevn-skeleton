@@ -1,41 +1,67 @@
 <template>
   <div>
     <div class="container">
-      <div class="box">
-        <div class="field">
-          <div class="control is-expanded">
-            <div class="select is-rounded is-primary is-fullwidth">
-              <select v-model="hairdresser" @change="onSelect($event)">
-                <option disabled value>Select a barber...</option>
-                <option>Barber A</option>
-                <option>Barber B</option>
-              </select>
+      <div class="columns">
+        <div class="column" v-bind:class="{ confirmedEvent: 'is-two-thirds'}">
+          <div class="box">
+            <div class="field">
+              <div class="control is-expanded">
+                <div class="select is-rounded is-primary is-fullwidth">
+                  <select v-model="hairdresser" @change="onSelect($event)">
+                    <option disabled value>Select a barber...</option>
+                    <option>Barber A</option>
+                    <option>Barber B</option>
+                  </select>
+                </div>
+              </div>
             </div>
+            <vue-cal
+              ref="vuecal"
+              style="height: 60vh;"
+              :time-from="7 * 60"
+              :time-to="23 * 60"
+              :disable-views="['years', 'year', 'month']"
+              :events="events"
+              :twelve-hour="true"
+              :cell-click-hold="false"
+              v-bind:snap-to-time="5"
+              :on-event-click="onEventClick"
+            />
           </div>
         </div>
-        <vue-cal
-          ref="vuecal"
-          style="height: 60vh;"
-          :time-from="7 * 60"
-          :time-to="23 * 60"
-          :disable-views="['years', 'year', 'month']"
-          :events="events"
-          :twelve-hour="true"
-          :cell-click-hold="false"
-          v-bind:snap-to-time="5"
-          :on-event-click="onEventClick"
-        />
+        <div class="column" v-if="confirmedEvent">
+          <!-- <article class="message">
+            <div class="message-header">
+              <p>Hello World</p>
+              <button class="delete" aria-label="delete"></button>
+            </div>
+            <div class="message-body">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum
+              <a>felis venenatis</a> efficitur. Aenean ac
+              <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem.
+            </div>
+          </article>-->
+          <div class="notification is-info is-light">
+            <button class="delete" aria-label="delete" @click="dropSelected"></button>
+            <h2 class="subtitle">Your appointment details</h2>
+            <p>Who: {{ selectedBarber }}</p>
+            <p>When: {{ selectedEvent.start }} to {{ selectedEvent.end }}</p>
+            <p>Where: At our downtown location</p>
+          </div>
+          <button
+            class="button is-primary is-loading"
+            v-if="success"
+          >Finish scheduling my appointment</button>
+          <button
+            class="button is-primary"
+            @click="scheduleHaircut"
+            v-else
+          >Finish scheduling my appointment</button>
+        </div>
       </div>
-      <!-- <div class="has-text-right">
-        <button class="button is-primary is-loading" v-if="success">
-          Finish scheduling my appointment
-        </button>
-        <button class="button is-primary" @click="scheduleHaircut" v-else>
-          Finish scheduling my appointment
-        </button>
-      </div>-->
     </div>
-    <div class="modal" v-bind:class="{ 'is-active': active }">
+    <div class="modal" v-bind:class="{ 'is-active': active }" v-if="selectedEvent">
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
@@ -62,7 +88,7 @@ import { mapGetters } from "vuex";
 import VueCal from "vue-cal";
 import "vue-cal/dist/drag-and-drop.js";
 import "vue-cal/dist/vuecal.css";
-// import AppointmentService from "../services/AppointmentService";
+import AppointmentService from "../services/AppointmentService";
 
 export default {
   name: "TheCalendar",
@@ -71,7 +97,8 @@ export default {
     return {
       active: false,
       selectedBarber: "",
-      selectedEvent: {},
+      selectedEvent: undefined,
+      confirmedEvent: undefined,
       events: [],
       username: "",
       success: false,
@@ -89,6 +116,7 @@ export default {
       this.active = false;
     },
     onConfirm() {
+      this.confirmedEvent = this.selectedEvent;
       this.modalClose();
     },
     onChange({ event }) {
@@ -98,10 +126,11 @@ export default {
       const res = await axios.get(
         `/api/available-appointments/${e.target.value}`
       );
-      this.events = res.data.map(({ title, start, end }) => ({
+      this.events = res.data.map(({ title, start, end, _id }) => ({
         title,
         start,
         end,
+        _id,
         class: "appointment"
       }));
       this.selectedBarber = e.target.value;
@@ -113,20 +142,16 @@ export default {
     closeModal() {
       this.active = false;
     },
+    dropSelected() {
+      this.confirmedEvent = undefined;
+    },
     async scheduleHaircut() {
-      // if (!this.events.length)
-      //   return console.log("Please choose an available time.");
-      // const { start, end, title } = this.events[0];
-      // const haircut = {
-      //   start,
-      //   end,
-      //   title,
-      // };
-      // AppointmentService.create(haircut);
-      // this.success = true;
-      // setTimeout(() => {
-      //   this.$router.push("dashboard");
-      // }, 2000);
+      const { _id } = this.confirmedEvent;
+      AppointmentService.create(_id);
+      this.success = true;
+      setTimeout(() => {
+        this.$router.push("dashboard");
+      }, 2000);
     }
   }
 };
